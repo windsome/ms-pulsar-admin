@@ -1,0 +1,53 @@
+{
+  "name": "ms-pulsar-admin",
+  "description": "pulsar管理员接口",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "amqplib": "^0.6.0",
+    "bluebird": "^3.5.5",
+    "debug": "^4.3.1",
+    "errcode": "^0.1.5",
+    "isomorphic-fetch": "^2.2.1",
+    "jayson": "^3.1.1",
+    "jsonwebtoken": "^8.5.1",
+    "kue": "^0.11.6",
+    "lodash": "^4.17.4",
+    "moment": "^2.18.1",
+    "mqtt": "^2.18.8",
+    "node-schedule": "^1.3.2",
+    "qs": "^6.5.1",
+    "redis": "^3.0.2"
+  },
+  "devDependencies": {
+    "apidoc-contenttype-plugin": "git+https://github.com/koko-ng/apidoc-contentType-plugin.git",
+    "async-busboy": "^0.6.2",
+    "babel-cli": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^4.2.3",
+    "prettier": "^1.10.2",
+    "webpack": "^3.10.0",
+    "webpack-node-externals": "^1.6.0"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,json}": [
+      "prettier --single-quote --write",
+      "git add"
+    ]
+  },
+  "scripts": {
+    "build": "DEBUG=\"app:*\" babel-node scripts/compile",
+    "precommit": "lint-staged",
+    "apidoc": "apidoc -i src/ -o doc/apis/ -t node_modules/apidoc-contenttype-plugin/template/ --parse-parsers apicontenttype=node_modules/apidoc-contenttype-plugin/api_content_type.js",
+    "beauty": "prettier --single-quote --write 'src/**/*.{js,jsx,css,scss}'",
+    "start": "DEBUG=\"app:*,yh*\" DEBUG_FORMAT=\"%N %m %D\" babel-node src",
+    "start-4-windows": "babel-node src"
+  }
+}

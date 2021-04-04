@@ -1,0 +1,13 @@
+{
+  "name": "cms-server",
+  "version": "1.0.0",
+  "description": "jtb-api-server API doc",
+  "title": "jtb-api-server API",
+  "url" : "http://api.smartgreenai.com:32363",
+  "sampleUrl": "http://api.smartgreenai.com:32363",
+  "forceLanguage":"zh-cn",
+  "template": {
+    "withCompare": true,
+    "withGenerator": true
+  }
+}

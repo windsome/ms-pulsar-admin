@@ -1,0 +1,23 @@
+import ErrCode from 'errcode';
+export default ErrCode;
+
+export const EC = {
+  ERR_SYSTEM_ERROR: -1,
+  ERR_OK: 0,
+  ERR_UNAUTH: 401,
+  ERR_3RD_API_FAIL: 40000,
+  ERR_UNKNOWN: 40001,
+  ERR_BUSY: 40002,
+  ERR_PARAM_ERROR: 40003,
+
+  ERR_NO_SUCH_ENTITY: 40004,
+  ERR_DB_ENTITY_DAMAGE: 40009,
+  ERR_NO_SUCH_API: 40011,
+  ERR_NOT_ALLOW: 40018,
+
+  ERR_PULSAR_NETWORK_FAIL: 412001,
+  ERR_PULSAR_OP_FAIL: 412002,
+  ERR_PULSAR_OP_CONFLICT: 412009
+};
+
+export const EM = require('./Errcode.cn').default(EC);
