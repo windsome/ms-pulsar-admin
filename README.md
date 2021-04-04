@@ -145,6 +145,7 @@ http://localhost:8080/admin/v2/tenants/<厂商tenant>
 }
 ```
 为简单起见,adminRoles和tenant为同一个值.
+
 2. 创建namespace
 接口:`https://pulsar.incubator.apache.org/admin/v2/namespaces/{tenant}/{namespace}`
 电信物联网平台示例: `http://localhost:8080/admin/v2/namespaces/aep-msgpush/2000016425`,其中`aep-msgpush`为超级用户,可以向所有namespace/topic发送消息.`2000016425`为厂商tenant.
