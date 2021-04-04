@@ -24,3 +24,18 @@ services:
       - pulsar
     environment:
       - SPRING_CONFIGURATION_FILE=/pulsar-manager/pulsar-manager/application.properties
+
+  pulsar-admin:
+    image: "windsome/ms-pulsar-admin:1.0.0"
+    restart: always
+    ports:
+      - "3120:3120"
+    depends_on:
+      - pulsar
+    links:
+      - pulsar
+    volumes:
+      - ./admin-cfg:/data/cfg
+    environment:
+      CFG_PATH: '/data/cfg'
+      DEBUG: "app:*"

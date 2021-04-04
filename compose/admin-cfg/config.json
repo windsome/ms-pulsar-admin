@@ -1,0 +1,12 @@
+{
+  "name": "pulsar管理服务",
+  "description": "用来操作pulsar,比如创建tenant,namesapce,token,permission等,会调用http://pulsar:8080接口",
+  "server_port": 3120,
+  "domain": "m.h5ren.com",
+  "pulsar": {
+    "url": "http://pulsar:8080",
+    "tokenSecretKeyBase64": "4hVFTHInIEwS4b545UpVWghv6njne1FsqMJRo4FG5O8=",
+    "adminRole": "test-user",
+    "adminJwt": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0LXVzZXIifQ.KCepkApIwUV3rDgnI7hqKk6Xv3I3rRBZCwtKWkQSIGw"
+  }
+}

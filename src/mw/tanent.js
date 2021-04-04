@@ -17,14 +17,14 @@ export function init(cfg) {
     } catch (error) {
       if (error.errcode !== EC.ERR_PULSAR_OP_CONFLICT) {
         debug('error! 非冲突错误,退出!');
-        return null;
+        throw error;
       }
       debug('tenant已经存在', uid);
     }
   };
 }
 
-export default function create(cfg) {
+export function create(cfg) {
   /**
    * 根据user._id创建在pulsar中相关内容.
    */
