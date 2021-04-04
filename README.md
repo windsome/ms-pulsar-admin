@@ -132,7 +132,7 @@ tokenSecretKey=data:;base64,4hVFTHInIEwS4b545UpVWghv6njne1FsqMJRo4FG5O8=
 通过调用broker的admin-api进行管理, 即访问`http://pulsar:8080`进行. 注意在api调用的http头中需要填写`Authorization`字段, 内容为: `'Bearer ' + ${adminJwt}`, 如: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0LXVzZXIifQ.KCepkApIwUV3rDgnI7hqKk6Xv3I3rRBZCwtKWkQSIGw`
 api列表见`https://pulsar.apache.org/admin-rest-api/?version=2.7.1&apiversion=v2#`
 目前主要用到的api为:
-1. 创建tenant
+1. 创建tenant  
   接口:`http://localhost:8080/admin/v2/tenants/{tenant}`,
   示例:
 ```
@@ -146,12 +146,12 @@ http://localhost:8080/admin/v2/tenants/<厂商tenant>
 ```
   为简单起见,adminRoles和tenant为同一个值.
 
-2. 创建namespace
+2. 创建namespace  
   接口:`https://pulsar.incubator.apache.org/admin/v2/namespaces/{tenant}/{namespace}`
   电信物联网平台示例: `http://localhost:8080/admin/v2/namespaces/aep-msgpush/2000016425`,其中`aep-msgpush`为超级用户,可以向所有namespace/topic发送消息.`2000016425`为厂商tenant.
   电信将向此namespace`aep-msgpush/2000016425`发送设备变化等消息, 厂商消费此namespace下topic消息.
 
-3. 授权
+3. 授权  
   接口:`http://pulsar.incubator.apache.org/admin/v2/namespaces/{tenant}/{namespace}/permissions/{role}`
   示例: 
 ```
