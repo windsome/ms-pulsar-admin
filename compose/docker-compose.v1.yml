@@ -12,6 +12,19 @@ services:
       - ./pulsar-cfg/data:/pulsar/data
       - ./pulsar-cfg/conf:/pulsar/conf
 
+  pulsar-manager:
+    image: "apachepulsar/pulsar-manager:v0.2.0"
+    restart: always
+    ports:
+      - "9527:9527"
+      - "7750:7750"
+    depends_on:
+      - pulsar
+    links:
+      - pulsar
+    environment:
+      - SPRING_CONFIGURATION_FILE=/pulsar-manager/pulsar-manager/application.properties
+
   pulsar-admin:
     image: "windsome/ms-pulsar-admin:1.0.0"
     restart: always
@@ -19,12 +32,11 @@ services:
       - "3120:3120"
     depends_on:
       - pulsar
-    # links:
-    #   - pulsar
+    links:
+      - pulsar
     volumes:
       - ./admin-cfg:/data/cfg
     environment:
       CFG_PATH: '/data/cfg'
       DEBUG: "app:*"
-    command: ["node", "sdist"]
-    # command: ["./wait-for-it.sh", "pulsar:8080", "-s", "-t", "5", "--", "node", "sdist"]
+    command: ["./wait-for-it.sh", "pulsar:8080", "-t", "5", "--", "node", "sdist"]
