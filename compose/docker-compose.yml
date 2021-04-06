@@ -25,6 +25,6 @@ services:
       - ./admin-cfg:/data/cfg
     environment:
       CFG_PATH: '/data/cfg'
-      DEBUG: "app:*"
+      DEBUG: app:*
     command: ["node", "sdist"]
     # command: ["./wait-for-it.sh", "pulsar:8080", "-s", "-t", "5", "--", "node", "sdist"]
