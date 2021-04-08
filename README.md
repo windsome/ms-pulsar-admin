@@ -1,5 +1,6 @@
-## pulsar在docker-compose中运行及超级管理API使用.
-pulsar的admin-api调用.
+# pulsar在docker-compose中运行及超级管理API使用.
+见[pulsar-standalone-admin](https://github.com/windsome/ms-pulsar-admin)  
+pulsar的admin-api调用.  
 包含功能: 创建tenant,namespace,token,role,permission
 ### 项目目标
 1. 创建租户, 及租户相关的namespace,role,token,permission
@@ -9,10 +10,10 @@ pulsar的admin-api调用.
   + 消费着监听 `msgpush/<own_tenant>/<topic>`下面的消息.
 
 ### 官网中以docker方式运行pulsar.
-  [在 Docker 里配置单机 Pulsar](http://pulsar.apache.org/docs/zh-CN/next/standalone-docker/)
-  使用`--mount`模式连接配置文件及数据文件:
-  `docker run -it --name=pulsar_standalone -p 6650:6650 -p 8080:8080 --mount source=pulsardata,target=/pulsar/data --mount source=pulsarconf,target=/pulsar/conf apachepulsar/pulsar:2.7.1 bin/pulsar standalone`
-  运行`docker inspect pulsar_standalone`获取到docker容器详情,找到`Mounts`字段,如果是第一次运行,pulsarconf会自动生成,`Source`字段即为存放配置的目录,该例子为`/var/lib/docker/volumes/pulsarconf/_data`,见如下:
+见[在 Docker 里配置单机 Pulsar](http://pulsar.apache.org/docs/zh-CN/next/standalone-docker/)  
+使用`--mount`模式连接配置文件及数据文件:  
+`docker run -it --name=pulsar_standalone -p 6650:6650 -p 8080:8080 --mount source=pulsardata,target=/pulsar/data --mount source=pulsarconf,target=/pulsar/conf apachepulsar/pulsar:2.7.1 bin/pulsar standalone`  
+运行`docker inspect pulsar_standalone`获取到docker容器详情,找到`Mounts`字段,如果是第一次运行,pulsarconf会自动生成,`Source`字段即为存放配置的目录,该例子为`/var/lib/docker/volumes/pulsarconf/_data`,见如下:  
 ```
         "Mounts": [
             {
@@ -39,14 +40,15 @@ pulsar的admin-api调用.
 ```
 
 ### 为方便修改及保存配置,使用文件夹映射方式运行docker化pulsar
-  先建立pulsar工作目录`./pulsar`,在其下面建立`data`用来保存数据,`conf`保存配置. 将上面`/var/lib/docker/volumes/pulsarconf/_data`中内容拷贝进目录`./pulsar/conf`
-  以`-v`目录映射模式运行docker, 命令: 
+先建立pulsar工作目录`./pulsar`,在其下面建立`data`用来保存数据,`conf`保存配置. 将上面`/var/lib/docker/volumes/pulsarconf/_data`中内容拷贝进目录`./pulsar/conf`  
+以`-v`目录映射模式运行docker, 命令:   
   ```docker run -it -p 6650:6650 -p 8080:8080 -v `pwd`/data:/pulsar/data -v `pwd`/conf:/pulsar/conf apachepulsar/pulsar:2.7.1 bin/pulsar standalone```
 
 ### pulsar-manager通过web界面对pulsar进行管理(不是必须)
-  pulsar-manager是一个pulsar的管理器,只能管理standalone型不需要认证的pulsar.他是一个web服务器,通过连接pulsar的admin-api进行管理.admin-api为一个url`http://localhost:8080`,运行命令为:
-   ```docker run -it -p 9527:9527 -p 7750:7750 -e SPRING_CONFIGURATION_FILE=/pulsar-manager/pulsar-manager/application.properties apachepulsar/pulsar-manager:v0.2.0```
-   初次启动此服务器后,需运行如下命令,生成管理员账号,然后访问`http://localhost:9527`,使用刚才创建的账号`admin`登录进行操作.
+pulsar-manager是一个pulsar的管理器,只能管理standalone型不需要认证的pulsar,是一个web服务器,通过连接pulsar的admin-api进行管理.  
+被调用的admin-api为一个url`http://localhost:8080`,运行命令为:  
+   ```docker run -it -p 9527:9527 -p 7750:7750 -e SPRING_CONFIGURATION_FILE=/pulsar-manager/pulsar-manager/application.properties apachepulsar/pulsar-manager:v0.2.0```  
+初次启动此服务器后,需运行如下命令,生成管理员账号,然后访问`http://localhost:9527`,使用刚才创建的账号`admin`登录进行操作.  
 ```
 CSRF_TOKEN=$(curl http://localhost:7750/pulsar-manager/csrf-token)
 curl \
@@ -57,13 +59,13 @@ curl \
    -d '{"name": "admin", "password": "apachepulsar", "description": "test", "email": "username@test.org"}'
 ```
 ### 真实运营部署环境介绍.
-  真实运营环境中,pulsar会部署成集群,这个暂不讨论. 还有一种准真实环境,即外部使用上与真实环境一样,但部署上使用standalone单机模式+jwt-token认证.即类似电信物联网平台中pulsar的使用模式.
-  电信物联网平台作为物联网设备管理平台,提供设备管理,命令转发,传感数据上报(即MQ消息推送)等功能, 其中MQ消息推送使用pulsar服务. 
-  互联网设备厂商在电信物联网平台注册账号的同时, 在pulsar服务中创建了一个tenant及jwt-token及一个namespace为`/aep-msgpush/<tenant-id>`. tenant只在此namespace下具有`consume`权限.
-  厂商用户可以在该namespace下创建不超过10个topic用来接收数据.不同topic可以关联不同的产品.
-  厂商token可以在`https://jwt.io/`进行在线解析,查看里面内容.
+真实运营环境中,pulsar会部署成集群,这个暂不讨论. 还有一种准真实环境,即外部使用上与真实环境一样,但部署上使用standalone单机模式+jwt-token认证.即类似电信物联网平台中pulsar的使用模式.  
+电信物联网平台作为物联网设备管理平台,提供设备管理,命令转发,传感数据上报(即MQ消息推送)等功能, 其中MQ消息推送使用pulsar服务.  
+互联网设备厂商在电信物联网平台注册账号的同时, 在pulsar服务中创建了一个tenant及jwt-token及一个namespace为`/aep-msgpush/<tenant-id>`. tenant只在此namespace下具有`consume`权限.  
+厂商用户可以在该namespace下创建不超过10个topic用来接收数据.不同topic可以关联不同的产品.  
+厂商token可以在`https://jwt.io/`进行在线解析,查看里面内容.  
   
-  从真实运营环境的需求可以看出有如下需求:
+从真实运营环境的需求可以看出有如下需求:  
   1. 需要控制访问授权,可以用jwt-token这种最简单方式.
   2. 需要有个超级用户,可以朝所有的namespace/topic发送消息.
   3. 需要能动态创建厂商租户.可以用admin-api完成.
@@ -112,8 +114,8 @@ base64 -d conf/auth/my-secret1-b64.key > conf/auth/my-secret1.key
 bin/pulsar tokens create --secret-key conf/auth/my-secret1.key --subject test-user 
 # 得到的token是: `eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0LXVzZXIifQ.KCepkApIwUV3rDgnI7hqKk6Xv3I3rRBZCwtKWkQSIGw`
 ```
-  这里有个注意事项,生成的my-secret1.key很重要,后续生成厂商的jwt也需要此key,做好保存工作.同时,不能让外部有机会获知此key. 否则, 该系统的认证机制等同透明, 任何人即可根据此key生成其他用户token,从而进行非法操作.
-  修改`standalone.conf`,找到如下键值,进行修改或添加
+这里有个注意事项,生成的my-secret1.key很重要,后续生成厂商的jwt也需要此key,做好保存工作.同时,不能让外部有机会获知此key. 否则, 该系统的认证机制等同透明, 任何人即可根据此key生成其他用户token,从而进行非法操作.  
+修改`standalone.conf`,找到如下键值,进行修改或添加  
 ```
 authenticateOriginalAuthData=true
 authenticationEnabled=true
@@ -129,12 +131,12 @@ tokenSecretKey=data:;base64,4hVFTHInIEwS4b545UpVWghv6njne1FsqMJRo4FG5O8=
 此时该pulsar即为需要jwt-token认证的broker. 管理操作需要使用admin-api进行.
 
 ### 为开发一个管理服务做准备工作(此服务将专门用于创建厂商用户tenant和jwt)
-通过调用broker的admin-api进行管理, 即访问`http://pulsar:8080`进行. 注意在api调用的http头中需要填写`Authorization`字段, 内容为: `'Bearer ' + ${adminJwt}`, 如: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0LXVzZXIifQ.KCepkApIwUV3rDgnI7hqKk6Xv3I3rRBZCwtKWkQSIGw`
-api列表见`https://pulsar.apache.org/admin-rest-api/?version=2.7.1&apiversion=v2#`
-目前主要用到的api为:
-1. 创建tenant  
-  接口:`http://localhost:8080/admin/v2/tenants/{tenant}`,
-  示例:
+通过调用broker的admin-api进行管理, 即访问`http://pulsar:8080`进行. 注意在api调用的http头中需要填写`Authorization`字段, 内容为: `'Bearer ' + ${adminJwt}`, 如: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0LXVzZXIifQ.KCepkApIwUV3rDgnI7hqKk6Xv3I3rRBZCwtKWkQSIGw`  
+api列表见`https://pulsar.apache.org/admin-rest-api/?version=2.7.1&apiversion=v2#`  
+目前主要用到的api为:  
+1. 创建tenant
+  接口:`http://localhost:8080/admin/v2/tenants/{tenant}`,  
+  示例:  
 ```
 http://localhost:8080/admin/v2/tenants/<厂商tenant>
 {
@@ -147,13 +149,13 @@ http://localhost:8080/admin/v2/tenants/<厂商tenant>
   为简单起见,adminRoles和tenant为同一个值.
 
 2. 创建namespace  
-  接口:`https://pulsar.incubator.apache.org/admin/v2/namespaces/{tenant}/{namespace}`
-  电信物联网平台示例: `http://localhost:8080/admin/v2/namespaces/aep-msgpush/2000016425`,其中`aep-msgpush`为超级用户,可以向所有namespace/topic发送消息.`2000016425`为厂商tenant.
-  电信将向此namespace`aep-msgpush/2000016425`发送设备变化等消息, 厂商消费此namespace下topic消息.
+  接口:`https://pulsar.incubator.apache.org/admin/v2/namespaces/{tenant}/{namespace}`  
+  电信物联网平台示例: `http://localhost:8080/admin/v2/namespaces/aep-msgpush/2000016425`,其中`aep-msgpush`为超级用户,可以向所有namespace/topic发送消息.`2000016425`为厂商tenant.  
+  电信将向此namespace`aep-msgpush/2000016425`发送设备变化等消息, 厂商消费此namespace下topic消息.  
 
 3. 授权  
-  接口:`http://pulsar.incubator.apache.org/admin/v2/namespaces/{tenant}/{namespace}/permissions/{role}`
-  示例: 
+  接口:`http://pulsar.incubator.apache.org/admin/v2/namespaces/{tenant}/{namespace}/permissions/{role}`  
+  示例:  
 ```
 POST http://localhost:8080/admin/v2/namespaces/aep-msgpush/2000016425/permissions/2000016425
 [
@@ -161,7 +163,7 @@ POST http://localhost:8080/admin/v2/namespaces/aep-msgpush/2000016425/permission
 ]
 ```
 ### 开发admin管理服务,使用jayson作为rpc服务协议.
-封装admin-api调用的源码目录在`src/mw/adminApi/`,主要实现了tenant创建,namespace创建,授权. jwt生成接口是不需要连接broker的, 只需要使用Secret-key生成而已.
+封装admin-api调用的源码目录在`src/mw/adminApi/`,主要实现了tenant创建,namespace创建,授权. jwt生成接口是不需要连接broker的, 只需要使用Secret-key生成而已.  
 + 目前对接的接口如下:
 1. 创建tenant, 参数为`tenant, [clusters]`. `adminRoles`与tenant相同, `allowedClusters`默认为`standalone`, 见`tenant_create.js`
 2. 创建namespace, 参数为`tenant, namespace`. 见`namespace_create.js`
