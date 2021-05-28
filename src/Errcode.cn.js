@@ -7,8 +7,8 @@ export default EC => ({
   [EC.ERR_BUSY]: '系统忙',
   [EC.ERR_PARAM_ERROR]: '参数错误',
   [EC.ERR_NO_SUCH_API]: '没有此API',
-  [EC.ERR_NOT_ALLOW]: '不允许的操作',
 
+  [EC.ERR_NOT_ALLOW]: '不允许的操作',
   [EC.ERR_NO_SUCH_ENTITY]: '数据库没有该实体',
   [EC.ERR_DB_ENTITY_DAMAGE]: '数据库中实体不一致',
 
